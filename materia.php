@@ -1,0 +1,69 @@
+<?php
+   session_start();
+?>
+<html lang="pt-br">
+	<head>
+		<meta charset="utf-8">
+		<title>CRUD - Matéria</title>
+		<link rel="stylesheet" type="text/css" href="estilo.css">
+	</head>
+	<style>
+	body{
+            font-family: Arial, Helvetica, sans-serif;
+             background-color: #2E8B57;
+
+        }
+	ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+		background-color: #333;
+	}
+
+		li {
+		float: left;
+	}
+
+		li a {
+		display: block;
+		color: white;
+		text-align: center;
+		padding: 14px 16px;
+		text-decoration: none;
+	}
+
+		li a:hover {
+		background-color: #111;
+	}
+	</style>
+	<body>
+	<ul>
+	<li><a href="index.php">Sair do Sistema</a></li>
+	<li><a href="principal.php">Principal</a></li>
+	<li><a href="index2.php">Consultar</a></li>
+	</ul>
+		<center><h1>Curso</h1>
+	
+			<?php
+			if(isset ($_SESSION['msg'])) 
+		{
+			echo $_SESSION['msg'];
+			unset ($_SESSION['msg']);
+		
+		}
+		?>
+		<form method ="POST" action="">
+			<label>Nome: </label>
+			<input type="text" name="nome" required placeholder="Digite o nome completo"><br><br>
+			
+			<label> E-mail: </label>
+			<input type="email" name="email" required placeholder="Digite o seu email"><br><br>
+			
+			<label> Senha </label>
+			<input type="password" name="senha" required placeholder="Digite a sua senha"><br><br>
+			
+			<input type="submit" value="Cadastrar">
+		</form>
+	</body>
+</html>

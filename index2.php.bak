@@ -1,0 +1,132 @@
+  <?php
+session_start(); 
+include_once ("conexao.php");
+
+?>
+<!DOCTYPE html>
+<html lang="pt-br"> 
+	<head>
+	<meta charset="utf-8"> 
+	<title> CRUD - Utilizando PHP e MySql</title>
+</head>
+	<style>
+	body{
+            font-family: Arial, Helvetica, sans-serif;
+             background-color: #87CEFA;
+
+        }
+	ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+		background-color: #333;
+	}
+
+		li {
+		float: left;
+	}
+
+		li a {
+		display: block;
+		color: white;
+		text-align: center;
+		padding: 14px 16px;
+		text-decoration: none;
+	}
+
+		li a:hover {
+		background-color: #111;
+	}
+	</style>
+<body>
+	<ul>
+		<li><a href = "cad_usuario.php">Cadastrar</a></li>
+		<li><a href = "index2.php">Consultar</a></li>
+		<li><a href = "sair.php">Sair do Sistema</a></li>
+		<li><a href = "principal.php">Voltar Principal</a></li>
+	</ul>
+    <center> <h1> Usuarios Cadastrados</h1> 
+	<?php
+	if (isset($_SESSION['msg'])) 
+	{
+		echo $_SESSION['msg'];
+		unset($_SESSION['msg']);
+		
+	}
+	
+	$pagina_atual = filter_input(INPUT_GET,'pagina', FILTER_SANITIZE_NUMBER_INT);
+	$pagina = (!empty($pagina_atual)) ?$pagina_atual : 1;
+	
+
+	$qnt_result_pg = 4;
+	
+	
+	$inicio = ($qnt_result_pg *$pagina) - $qnt_result_pg;
+	
+	$sql = "SELECT * FROM usuarios LIMIT $inicio, $qnt_result_pg";
+	$comando = mysqli_query($conn, $sql);
+	echo "<table border=1>";
+	while($row_usuarios = mysqli_fetch_assoc($comando) )
+		
+    {
+        echo "<tr>";
+        $ic = 1;
+        while ($ic <= 5)
+        {
+            if ($ic === 1)
+                echo "<td> ID: " . $row_usuarios['id'] . "<br> </td>";
+            if ($ic === 2)
+                echo "<td> Nome: " . $row_usuarios['nome'] . "<br> </td> ";
+            if ($ic === 3)    
+                   echo "<td> E-mail: " . $row_usuarios['email'] . "<br> </td> ";
+            if ($ic === 4)
+                echo "<td> <a href='edit_usuario.php?id=" . $row_usuarios['id'] . "'>Editar</a> </td> ";                
+            if ($ic === 5)
+                echo "<td> <a href='delete_usuario.php?id=" . $row_usuarios['id'] . "'>Excluir</a><br><hr> </td> ";
+            $ic = $ic + 1;
+        }
+         echo "</tr>";
+    }
+    echo "</table>";
+	
+	
+	$sql = "SELECT COUNT(id) AS num_result FROM usuarios";
+	$resultado_pg = mysqli_query ($conn, $sql);
+	$row_pg = mysqli_fetch_assoc($resultado_pg);
+	
+	$quantidade_pg = ceil($row_pg['num_result'] / $qnt_result_pg);
+	
+	
+	$max_links = 2;
+	echo "<a href='index2.php?pagina=1'>Primeira</a> ";
+	
+	for ($pag_ant = $pagina = $max_links; $pag_ant <= $pagina = 1; $pag_ant++)
+	{
+		if ($pag_ant>=1)
+		{
+			echo "<a href ='index2.php?pagina=$pag_ant'>$pag_ant</a>";
+		}
+			
+	}
+	
+	echo "$pagina ";
+	
+	for($pag_dep = $pagina + 1; $pag_dep <= $pagina = $max_links; $pag_dep++)
+	{
+		if($pag_dep <= $quantidade_pg)
+		{
+			echo "<a href='index2.php?pagina=$pag_dep'>$pag_dep</a>";
+		}
+	}
+	
+	echo "<a href='index2.php?pagina=$quantidade_pg'>Ultima</a>";
+	
+	?>
+	</body>
+	</html>
+	
+
+	
+	
+	
